@@ -16,8 +16,38 @@ function App() {
   const [currentStage, setCurrentStage] = useState(stages[0].name);
   const [words] = useState(wordsList);
 
+  const [pickedWord, setPickedWord] = useState("");
+  const [pickedCategory, setPickedCategory] = useState("");
+  const [letters, setLetters] = useState([]);
+
+  const pickWordAndCategory = () => {
+    // pick a random category
+    const categories = Object.keys(words);
+    const category =
+      categories[Math.floor(Math.random() * Object.keys(categories).length)];
+
+    // pick a random word
+    const word =
+      words[category][Math.floor(Math.random() * words[category].length)];
+
+    return { word, category };
+  };
+
+  pickWordAndCategory();
+
   // start secret word
   const startGame = () => {
+    // pick a random word and category
+    const { word, category } = pickWordAndCategory();
+
+    // create an array of letters
+    const wordLetters = Array.from(word).map((letter) => letter.toUppercass());
+    console.log(wordLetters);
+
+    // fill states
+    setPickedWord(word);
+    setPickedCategory(category);
+    setLetters(wordLetters);
     setCurrentStage(stages[1].name);
   };
 
@@ -35,7 +65,7 @@ function App() {
     <div className="App">
       {currentStage === "start" && <StartScreen startGame={startGame} />}
       {currentStage === "game" && <Game verifyLetter={verifyLetter} />}
-      {currentStage === "end" && <GameOver retry={retry}/>}
+      {currentStage === "end" && <GameOver retry={retry} />}
     </div>
   );
 }
